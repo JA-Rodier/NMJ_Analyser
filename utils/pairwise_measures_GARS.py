@@ -174,6 +174,7 @@ class PairwiseMeasures(object):
         of mass of the reference and segmentation.
         :return:
         """
+        print('calculating com_dist')
         if self.flag_empty:
             return -1
         else:
@@ -330,6 +331,7 @@ class RegionProperties(object):
         if pixdim is None:
             pixdim = [1, 1, 1]
         self.seg = seg
+        self.seg_bin = (self.seg > 0).astype(float)
         self.order = [1, 0, 2]
         self.voxel_size = np.prod(pixdim)
         self.pixdim = pixdim
@@ -340,15 +342,17 @@ class RegionProperties(object):
         self.img_channels = self.img.shape[4] if self.img.ndim >= 4 else 1
         for i in range(self.img.ndim, 5):
             self.img = np.expand_dims(self.img, -1)
-        self.bin = bin
+
         self.threshold = threshold
         if self.seg is not None:
             self.masked_img, self.masked_seg = self.__compute_mask()
         else:
             print("no mask")
         self.neigh = num_neighbors
-        self.connect = MorphologyOps(self.binarise(),
+        self.connect = MorphologyOps(self.seg_bin,
                                      self.neigh).connect()
+        self.dilate = MorphologyOps(self.seg_bin, self.neigh).dilate()
+        self.erode = MorphologyOps(self.seg_bin, self.neigh).erode()
         # self.glszm = self.grey_level_size_matrix()
         self.m_dict = {
             'centre of mass': (self.centre_of_mass, ['CoMx',
@@ -395,7 +399,7 @@ class RegionProperties(object):
         return regions, probs
 
     def shape_factor(self):
-        binarised = self.binarise()
+        binarised = self.seg_bin
         vol = np.sum(binarised)
         if vol == 0:
             return 0, 0, 0
@@ -409,7 +413,7 @@ class RegionProperties(object):
             count_final_surf, vol_change/np.sum(surf_map)
 
     def skeleton_length(self):
-        return np.sum(MorphologyOps(self.binarise(), 6).skeleton_map())
+        return np.sum(MorphologyOps(self.seg_bin, 6).skeleton_map())
 
     def centre_of_mass(self):
         return list(np.mean(np.argwhere(self.seg > self.threshold), 0))
@@ -429,24 +433,23 @@ class RegionProperties(object):
     def surface(self):
 
         border_seg, count_surf, border_ext, count_surf_ext = MorphologyOps(
-            self.binarise(), self.neigh, pixdim=self.pixdim).border_surface_measures()
-        numb_border_seg = np.sum(border_seg)
-        count_surfaces = np.where(count_surf > 0, 6-count_surf, count_surf)
-        numb_border_ext = np.sum(border_ext)
-        count_surfaces_ext = np.where(count_surf_ext > 0, 6 - count_surf_ext,
-                                      count_surf_ext)
-        return numb_border_seg, np.sum(count_surfaces), numb_border_ext, \
-            np.sum(count_surfaces_ext)
+            self.seg_bin, self.neigh, pixdim=self.pixdim).border_surface_measures()
+        # numb_border_seg = np.sum(border_seg)
+        # count_surfaces = np.where(count_surf > 0, 6-count_surf, count_surf)
+        # numb_border_ext = np.sum(border_ext)
+        # count_surfaces_ext = np.where(count_surf_ext > 0, 6 - count_surf_ext,
+        #                               count_surf_ext)
+        return border_seg, count_surf, border_ext, \
+            count_surf_ext
 
     def surface_dil(self):
-        return np.sum(MorphologyOps(self.binarise(), self.neigh).dilate() -
-                      self.binarise()), \
-            np.sum(self.binarise() - MorphologyOps(self.binarise(),
-                                                   self.neigh).erode())
+        return np.sum(self.dilate -
+                      self.seg_bin), \
+            np.sum(self.seg_bin - self.erode)
 
     def cc_size(self):
         if self.connect is None:
-            self.connect = MorphologyOps(self.binarise(),
+            self.connect = MorphologyOps(self.seg_bin,
                                          self.neigh).connect()
         min_size = 100000
         max_size = 0
@@ -462,19 +465,19 @@ class RegionProperties(object):
 
     def connect_cc(self):
         if self.connect is None:
-            self.connect = MorphologyOps(self.binarise(),
+            self.connect = MorphologyOps(self.seg_bin,
                                          self.neigh).connect()
         return np.max(self.connect)
 
     def fragmentation(self):
         if self.connect is None:
-            self.connect = MorphologyOps(self.binarise(),
+            self.connect = MorphologyOps(self.seg_bin,
                                          self.neigh).connect()
         return 1 - 1.0/(np.max(self.connect)+0.000001)
 
     def dist_cc(self):
         if self.connect is None:
-            self.connect = MorphologyOps(self.binarise(),
+            self.connect = MorphologyOps(self.seg_bin,
                                          self.neigh).connect()
         connected, numb_frac = self.connect, np.max(self.connect)
         if numb_frac == 1:

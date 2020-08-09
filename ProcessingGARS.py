@@ -15,6 +15,7 @@ FORBIDDEN = ['MOUSE6_HA'] # To Adapt for to skip problematic folders
 
 
 def create_connective_support(connection=1, dim=3):
+    print('create connective support')
     init = np.ones([3]*dim)
     results = np.zeros([3] * dim)
     centre = [1]*dim
@@ -28,6 +29,7 @@ def create_connective_support(connection=1, dim=3):
 
 
 def create_threshsize_connected_components(seg, connection=3, thresh=5):
+    print('creating threshsize cc')
     connection_shape = create_connective_support(connection)
     label, nf = meas.label(seg, connection_shape)
     seg_new = np.zeros_like(label)
@@ -181,7 +183,7 @@ def process_subject(path_jpeg, path_save, subject_name, thresh=64,
 
         label_filled, seg_filled, numb_red = \
             create_threshsize_connected_components(img_red_filled)
-        nii_label = nib.Nifti1Image(label_filled, affine)
+        nii_label = nib.Nifti1Image(label_filled.astype(float), affine)
         nib.save(nii_label, os.path.join(path_save,
                                          'LabelsFilled'+subject_name+'.nii.gz'))
 
@@ -189,8 +191,8 @@ def process_subject(path_jpeg, path_save, subject_name, thresh=64,
         img_green = np.where(img_green > thresh, 1.0*img_green/256.0,
                              np.zeros_like(
             img_red))
-        nii_red = nib.Nifti1Image(np.concatenate(array_red, 2), affine)
-        nii_green = nib.Nifti1Image(np.concatenate(array_green, 2), affine)
+        nii_red = nib.Nifti1Image(np.concatenate(array_red, 2).astype(float), affine)
+        nii_green = nib.Nifti1Image(np.concatenate(array_green, 2).astype(float), affine)
         nib.save(nii_red, os.path.join(path_save,
                                        'Red_' + subject_name + '.nii.gz'))
         nib.save(nii_green, os.path.join(path_save,
