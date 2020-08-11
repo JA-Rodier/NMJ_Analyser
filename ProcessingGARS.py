@@ -57,6 +57,7 @@ def study_component(label, red_filled, red, green, pixdim=[0.38, 0.38,
     Returns:
 
     '''
+    print(pixdim)
     seg_label = np.where(red_filled == label, np.ones_like(red), np.zeros_like(
         red))
     red_label = seg_label * red
@@ -117,8 +118,7 @@ def study_subject(label, red, green, subject,pixdim=None):
         indices = np.asarray(np.where(label == l)).T
         if indices.shape[0] * np.prod(pixdim) > 50:
             r_red, r_greenred, r_greenred_min, c_greenred, c_greenred_min \
-                = study_component(l, label, red,
-                                                                green)
+                = study_component(l, label, red, green,pixdim)
             r_red['alabel'] = l
             r_red['aid'] = subject
             append_keys(r_red, 'red')
@@ -251,6 +251,7 @@ def main(argv):
         sys.exit(2)
 
     pixdim = [args.pixdim, args.pixdim, args.pixdim_z]
+    print(pixdim)
     thresh = args.threshold
     path_name = glob.glob(args.path)
     for p in path_name:
