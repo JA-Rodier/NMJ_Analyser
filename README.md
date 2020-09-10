@@ -1,13 +1,16 @@
 # NMJ_Analyser
-
+The code was created using python 3.7 and the following version of packages
 ## Requirements
- - scipy -> for ndimage
- - PIL -> for reading of jpeg
+ - scipy 1.5.3
+ - Pillow 7.2.0
+ - numpy 1.19.1
+ - pandas 1.1.0
+ - nibabel 3.1.1
+ 
+In addition, the following modules are imported
  - glob
  - os
- - numpy
  - argparse
- - pandas
  - sys
 
 Performs analysis of NMJ data 

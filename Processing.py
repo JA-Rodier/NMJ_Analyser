@@ -6,7 +6,7 @@ import glob
 import os
 from PIL import Image
 import nibabel as nib
-from utils.pairwise_measures_GARS import RegionProperties, \
+from utils.pairwise_measures import RegionProperties, \
     PairwiseMeasures
 import pandas as pd
 import argparse
@@ -246,8 +246,6 @@ def main(argv):
 
     except argparse.ArgumentTypeError:
         print('ProcesingGARS.py -p <input path>  -t <threshold variables> -dx -dz')
-        print('The list of independent variables must always start with the '
-              'Age')
         sys.exit(2)
 
     pixdim = [args.pixdim, args.pixdim, args.pixdim_z]
