@@ -158,7 +158,7 @@ class PairwiseMeasures(object):
         return np.sum(self.__union_map())
 
     def overlap(self):
-        return np.sum(self.seg)/np.sum(self.ref) * 100
+        return np.sum(self.ref)/np.sum(self.seg) * 100 # Modifying to be green / red *100
 
     def intersection_over_union(self):
         """
