@@ -234,8 +234,8 @@ class PairwiseMeasures(object):
         :return: distance_border_ref, distance_border_seg, border_ref,
         border_seg
         """
-        border_ref = MorphologyOps(self.ref, self.neigh).border_map()
-        border_seg = MorphologyOps(self.seg,
+        border_ref = MorphologyOps((self.ref>0), self.neigh).border_map()
+        border_seg = MorphologyOps((self.seg>0),
                                    self.neigh).border_map()
         oppose_ref = 1 - self.ref/np.where(self.ref == 0, np.ones_like(
             self.ref), self.ref)

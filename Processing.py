@@ -81,11 +81,12 @@ def study_component(label, red_filled, red, green, pixdim=[0.38, 0.38,
     return results_red.m_dict_result, results_greenred.m_dict_result, \
         results_greenred_min.m_dict_result,\
         comp_greenred.m_dict_result, comp_greenred_min.m_dict_result
-
+import re
 
 def append_keys(dictionary, appending):
     for k in dictionary.keys():
-        new_key = k + appending
+        k_new = re.sub(r"%s$"%appending,"",k)
+        new_key = k_new + appending
         dictionary[new_key]  = dictionary.pop(k)
     return
 
@@ -106,7 +107,6 @@ def study_subject(label, red, green, subject,pixdim=None):
     '''
     if pixdim is None:
         pixdim = [0.415, 0.415, 1.750]
-        pixdim = [0.38, 0.38, 1.750]
     res_red = []
     res_greenred = []
     res_greenred_min = []
@@ -152,26 +152,31 @@ def process_subject(path_jpeg, path_save, subject_name, thresh=64,
 
     '''
     affine = np.eye(4)
-    list_red = glob.glob(os.path.join(path_jpeg,'*red*.jpg'))
-    list_green = glob.glob(os.path.join(path_jpeg,'*green*.jpg'))
+    list_red = glob.glob(os.path.join(path_jpeg,'*red*'))
+    list_green = glob.glob(os.path.join(path_jpeg,'*green*'))
+    print(len(list_red),len(list_green))
     if len(list_red) == 0:
-        list_red = glob.glob(os.path.join(path_jpeg, '*RED*.jpg'))
-        list_green = glob.glob(os.path.join(path_jpeg, '*GREEN*.jpg'))
+        list_red = glob.glob(os.path.join(path_jpeg, '*RED*'))
+        list_green = glob.glob(os.path.join(path_jpeg, '*GREEN*'))
     array_red = []
     array_green = []
+    if len(list_red)==0:
+        raise ValueError('No files as red or green in the specified path')
+    if len(list_red) != len(list_green):
+        raise ValueError('Not the same numbe rof images for red and green')
     if len(list_red) > 0:
         list_red = sorted(list_red)
         list_green = sorted(list_green)
         for r in list_red:
-            jpgfile = Image.open(r)
-            array_img = np.reshape(np.asarray(list(jpgfile.getdata()))[:, 0],
-                [jpgfile.width, jpgfile.height,1])
+            img_file = Image.open(r)
+            array_img = np.reshape(np.asarray(list(img_file.getdata()))[:, 0],
+                [img_file.width, img_file.height,1])
             array_red.append(array_img)
 
         for g in list_green:
-            jpgfile = Image.open(g)
-            array_img = np.reshape(np.asarray(list(jpgfile.getdata()))[:, 1],
-                [jpgfile.width, jpgfile.height, 1])
+            img_file = Image.open(g)
+            array_img = np.reshape(np.asarray(list(img_file.getdata()))[:, 1],
+                [img_file.width, img_file.height, 1])
             array_green.append(array_img)
 
         img_red = np.concatenate(array_red, 2)
@@ -256,7 +261,7 @@ def main(argv):
         dirname = os.path.dirname(p)
         s = os.path.basename(p)
         if s not in FORBIDDEN:
-            pj = os.path.join(dirname, s, 'JPEG')
+            pj = os.path.join(dirname, s)
             ps = os.path.join(dirname, s)
             if args.stop_early:
                 process_subject(pj, ps, s, thresh=thresh, pixdim=pixdim,
