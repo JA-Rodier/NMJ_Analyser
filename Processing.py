@@ -6,7 +6,7 @@ import glob
 import os
 from PIL import Image
 import nibabel as nib
-from utils.pairwise_measures import RegionProperties, \
+from .utils.pairwise_measures import RegionProperties, \
     PairwiseMeasures
 import pandas as pd
 import argparse
