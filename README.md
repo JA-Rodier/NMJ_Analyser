@@ -12,15 +12,21 @@ In addition, the following modules are imported
  - os
  - argparse
  - sys
-
+ - Tinker
 Performs analysis of NMJ data 
 
+## Installation
+pip install nmjanalyzer
+
+Once the other required packages are installed, type nmj_analyzer on the command line
+A window appears that will allow for the different parameters to be entered
 ## Usage
 
-The NMJ Analyser takes as input directories where jpg files have been stored 
+NMJ-Analyser requires NMJs to be separated by at least 20um. Images which contain superimposed NMJs are not ideal for analysis.
+The NMJ Analyser takes as input directories where jpg or png files have been stored 
 
 For each subject, the input is presented as 
-SUBJ/JPEG/*jpg
+SUBJ/*jpg or png
 The ..... files must contain the keyword red or RED
 The ..... files must contain the keyword green or GREEN
 The slices should ordered numerically ex Mouse1_GREEN_0001.jpg.... Mouse1_GREEN_0010.jpg
