@@ -16,7 +16,21 @@ In addition, the following modules are imported
 Performs analysis of NMJ data 
 
 ## Installation
-pip install nmjanalyzer
+Python3 is required for NMJ-Analyser installation and won't work with Python2 
+
+Before attempting to install NMJ-Analyser, do make sure the following packages are installed
+•	SciPy, for multidimensional image processing: https://www.scipy.org/install.html
+•	pillow, for reading images: https://pillow.readthedocs.io/en/stable/installation.html
+•	glob, for finding the pathnames: https://docs.python.org/3/library/glob.html
+•	os: https://pypi.org/project/os-sys/
+•	numpy: https://numpy.org/install/
+•	argparse: https://pypi.org/project/argparse/
+•	pandas: https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html
+•	sys: https://docs.python.org/3/install/
+•	Scikit-image:https://scikit-image.org/docs/dev/install.html#install-via-pip 
+
+With pip3 installed, type
+pip3 install nmjanalyzer to install the NMJ-Analyzer package
 
 Once the other required packages are installed, type nmj_analyzer on the command line
 A window appears that will allow for the different parameters to be entered
