@@ -1,39 +1,24 @@
 # NMJ_Analyser
-The code was created using python 3.7 and the following version of packages
+The code was created using python 3.XX and the following packages
 ## Requirements
- - scipy 1.5.3
- - Pillow 7.2.0
- - numpy 1.19.1
- - pandas 1.1.0
- - nibabel 3.1.1
- 
-In addition, the following modules are imported
- - glob
- - os
- - argparse
- - sys
- - Tinker
+pip install scipy pillow numpy pandas nibabel
+
+
 Performs analysis of NMJ data 
 
-## Installation
-Python3 is required for NMJ-Analyser installation and won't work with Python2 
+## Installation of requirements
+pip install scipy pillow numpy pandas nibabel
 
-Before attempting to install NMJ-Analyser, do make sure the following packages are installed
-•	SciPy, for multidimensional image processing: https://www.scipy.org/install.html
-•	pillow, for reading images: https://pillow.readthedocs.io/en/stable/installation.html
-•	glob, for finding the pathnames: https://docs.python.org/3/library/glob.html
-•	os: https://pypi.org/project/os-sys/
-•	numpy: https://numpy.org/install/
-•	argparse: https://pypi.org/project/argparse/
-•	pandas: https://pandas.pydata.org/pandas-docs/stable/getting_started/install.html
-•	sys: https://docs.python.org/3/install/
-•	Scikit-image:https://scikit-image.org/docs/dev/install.html#install-via-pip 
+## Installation of NMJ-Analyser
+Python3 is required for NMJ-Analyser installation
+python3 -m pip install .
 
-With pip3 installed, type
-pip3 install nmjanalyzer to install the NMJ-Analyzer package
-
-Once the other required packages are installed, type nmj_analyzer on the command line
+Once the packages are installed, type nmj_analyzer on the command line
 A window appears that will allow for the different parameters to be entered
+
+NOTE: As of March 5, it looks like it is needed to manually quit the process by closing the window using "QUIT".
+
+
 ## Usage
 
 NMJ-Analyser requires NMJs to be separated by at least 20um. Images which contain superimposed NMJs are not ideal for analysis.
