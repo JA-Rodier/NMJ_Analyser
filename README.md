@@ -1,8 +1,5 @@
 # NMJ_Analyser
 The code was created using python 3.XX and the following packages
-## Requirements
-pip install scipy pillow numpy pandas nibabel
-
 
 Performs analysis of NMJ data 
 
@@ -11,6 +8,7 @@ pip install scipy pillow numpy pandas nibabel
 
 ## Installation of NMJ-Analyser
 Python3 is required for NMJ-Analyser installation
+
 python3 -m pip install .
 
 Once the packages are installed, type nmj_analyzer on the command line
