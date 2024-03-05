@@ -492,7 +492,7 @@ class RegionProperties(object):
                     size_array.append(indices_j.shape[0] + indices_l.shape[0])
                     dist_array.append(np.mean(dist.cdist(indices_l,
                                                          indices_j,
-                                                         'wminkowski',
+                                                         'minkowski',
                                                          p= 2,
                                                          w=self.pixdim)))
             return np.sum(np.asarray(dist_array) * np.asarray(size_array) /
@@ -523,7 +523,7 @@ class RegionProperties(object):
         if np.sum(self.binarise()) < 2:
             return 0
         indices = np.asarray(np.where(self.binarise() == 1)).T
-        pdist = dist.pdist(indices, 'wminkowski', p=2, w=self.pixdim)
+        pdist = dist.pdist(indices, 'minkowski', p=2, w=self.pixdim)
         return np.max(pdist)
 
     def sav(self):
